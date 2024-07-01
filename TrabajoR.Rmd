@@ -1,0 +1,439 @@
+---
+title: "Estadistíca Descriptiva"
+author: "Esteban Vizhñay"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r}
+library(readr)
+alimentos <- read_csv("Combo.csv")
+```
+
+```{r}
+alimentos
+```
+
+## 1. Describa el comportamiento de la variable carne teniendo en cuenta la tendencia, variabilidad, distribución, valores atípicos entre otros.
+
+Extraer carne del conjunto original
+
+```{r}
+carnes = alimentos$Carne
+```
+
+Visualizamos los primeros 30 valores
+
+```{r}
+head(carnes, 30)
+```
+
+## Medidas de tendencia central
+
+### Media
+
+```{r}
+mean(carnes)
+```
+
+### Mediana
+
+```{r}
+median(carnes)
+```
+
+### Moda
+
+Como primer paso, se gráfica la tabla de frecuencias de "carne"
+
+```{r}
+barplot(table(carnes), col = c(4, rep("gray", 4)))
+legend("topright", "Moda", fill = 4)
+```
+
+A simple vista no es posible obtener una moda con la precisión de los decimales de nuestro conjunto. Ahora se procede a redondear los valores en 2 y generar la gráfica.
+
+```{r}
+barplot(table(round(carnes,2 )), col = c(4, rep("gray", 4)))
+legend("topright", "Moda", fill = 4)
+```
+
+De igual manera no es posible apreciar una moda, por lo tanto para este conjunto no obtendremos una moda debido a la precisión del valor decimal.
+
+## Medidas de dispersión
+
+### Rango
+
+```{r}
+rango = max(carnes) - min(carnes)
+rango 
+```
+
+El valor anterior indica que los valores del conjunto de datos se encuentran en un intervalo pequeño.
+
+### Varianza muestral
+
+```{r}
+var(carnes)
+```
+
+El valor anterior indica que los valores del conjunto de datos están cerca de la media, es decir, no existe demasiada dispersión de los mismos.
+
+### Desviación estándar
+
+```{r}
+sd(carnes)
+```
+
+El valor anterior indica que los valores del conjunto de datos están cerca de la media.
+
+Una forma de poder evidenciar las conclusiones anteriores es crear un histograma del conjunto de datos
+
+```{r}
+hist(carnes, main="Histograma de carnes")
+```
+
+### Medidas de posición
+
+### Cuartiles
+
+```{r}
+cuantiles_carnes = quantile(carnes)
+cuantiles_carnes
+```
+
+```{r}
+boxplot(carnes, col = 4, horizontal = TRUE)
+text(cuantiles_carnes[2], 1.25, expression(Q[1]))
+text(cuantiles_carnes[3], 1.25, expression(Q[2]))
+text(cuantiles_carnes[4], 1.25, expression(Q[3]))
+```
+
+## 2. Describa el comportamiento de la variable salsa teniendo en cuenta la tendencia, variabilidad, distribución, valores atípicos entre otros.
+
+Extraer carne del conjunto original
+
+```{r}
+salsas = alimentos$Salsa
+```
+
+Visualizamos los primeros 30 valores
+
+```{r}
+head(salsas, 30)
+```
+
+## Medidas de tendencia central
+
+### Media
+
+```{r}
+mean(salsas)
+```
+
+### Mediana
+
+```{r}
+median(salsas)
+```
+
+### Moda
+
+Como primer paso, se gráfica la tabla de frecuencias de "salsa"
+
+```{r}
+barplot(table(salsas), col = c(4, rep("gray", 4)))
+legend("topright", "Moda", fill = 4)
+```
+
+De igual manera que el conjunto de datos de "carnes" no es posible obtener una moda.
+
+## Medidas de dispersión
+
+### Rango
+
+```{r}
+max(salsas) - min(salsas) 
+```
+
+El valor anterior indica que los valores del conjunto de datos se encuentran en un intervalo pequeño.
+
+### Varianza muestral
+
+```{r}
+var(salsas)
+```
+
+El valor anterior indica que los valores del conjunto de datos están cerca de la media, es decir, no existe demasiada dispersión de los mismos.
+
+### Desviación estándar
+
+```{r}
+sd(salsas)
+```
+
+El valor anterior indica que los valores del conjunto de datos están cerca de la media.
+
+Una forma de poder evidenciar las conclusiones anteriores es crear un histograma del conjunto de datos
+
+```{r}
+hist(salsas, main="Histograma de salsas")
+```
+
+### Medidas de posición
+
+### Cuartiles
+
+```{r}
+cuantiles_salsas = quantile(salsas)
+cuantiles_salsas
+```
+
+```{r}
+boxplot(salsas, col = 4, horizontal = TRUE)
+text(cuantiles_salsas[2], 1.25, expression(Q[1]))
+text(cuantiles_salsas[3], 1.25, expression(Q[2]))
+text(cuantiles_salsas[4], 1.25, expression(Q[3]))
+```
+
+## 3. Describa el comportamiento de la variable papa
+
+Extraer carne del conjunto original
+
+```{r}
+papas = alimentos$Papas
+```
+
+Visualizamos los primeros 30 valores
+
+```{r}
+head(papas, 30)
+```
+
+## Medidas de tendencia central
+
+### Moda
+
+A pesar que el conjunto de datos no es numérico es posible obtener la moda ya que se busca el valor mas repetido de todo el conjunto.
+
+```{r}
+table(papas)
+```
+
+Para este caso el valor mas repetido es **"Medianas".**
+
+## 4. Describa el comportamiento bivariado de las variables carne y salsa, y calcule e interprete el coeficiente de correlación.
+
+Obtenemos un gráfico de dispersión
+
+```{r}
+# Crear un gráfico de dispersión
+plot(carnes, salsas, main="Gráfico de Dispersión de Carne vs Salsa", xlab="Carne", ylab="Salsa", pch=19, col="blue")
+
+```
+
+### Coeficiente de correlación
+
+```{r}
+cor(carnes, salsas)
+```
+
+El valor anterior indica que existe una correlación fuerte entre carnes y salsas. A medida que aumente los valores de las carnes provoca que los valores de las salsas también aumenten.
+
+## 5. ¿Qué combinación de papas y refresco es la más frecuente?
+
+Obtenemos el conjunto de valores de refresco
+
+```{r}
+refrescos = alimentos$Refresco
+```
+
+Obtenemos la tabla de frecuencias para los dos conjuntos de datos
+
+```{r}
+papas_x_refrescos = table(papas, refrescos)
+papas_x_refrescos
+```
+
+Obtenemos el valor máximo
+
+```{r}
+max(papas_x_refrescos)
+```
+
+Con el valor obtenido podemos observar que la combinación papas medianas y refresco mediano es la mas frecuente.
+
+## 6. ¿Qué combinación de papas y refresco es la menos frecuente?
+
+Obtenemos el valor mínimo
+
+```{r}
+min(papas_x_refrescos)
+```
+
+Con la tabla anterior podemos observar que la combinación papas chicas y refresco grande es la menos frecuente.
+
+## 7. Calcula la probabilidad que hay de que un cliente seleccionado al azar haya pedido:
+
+### Papas medianas
+
+$$
+A = \text{Papas medianas}
+$$
+
+$$
+P(A)
+$$
+
+La probabilidad A es
+
+```{r}
+papas_medianas  = alimentos [ which( alimentos$Papas=="Medianas"),]
+prob_a = (dim(papas_medianas)/length(papas))[1]
+prob_a
+```
+
+### Papas medianas o refresco chico
+
+$$
+A = \text{Papas medianas}
+$$
+
+$$
+B = \text{Refresco chico}
+$$
+
+$$
+P(A \cup B) = P(A) + P(B) - P(A \cap B)
+$$
+
+Probabilidad de A
+
+```{r}
+papas_medianas  = alimentos [ which( alimentos$Papas=="Medianas"),]
+prob_a = (dim(papas_medianas)/length(papas))[1]
+```
+
+```{r}
+prob_a
+```
+
+Probabilidad de B
+
+```{r}
+refresco_chico = alimentos [ which(alimentos$Refresco=="Chico"),]
+prob_b = (dim(refresco_chico)/length(refrescos))[1]
+```
+
+```{r}
+prob_b
+```
+
+Probabilidad de A intersección B
+
+```{r}
+papas_medianas_refresco_chico = alimentos [ which(alimentos$Papas =="Medianas" & alimentos$Refresco=="Chico"),]
+prob_a_b = (dim(papas_medianas_refresco_chico)/length(refrescos))[1]
+```
+
+```{r}
+prob_a_b
+```
+
+Probabilidad de A unión B es
+
+$$
+P(A \cup B) = P(A) + P(B) - P(A \cap B)
+$$
+
+```{r}
+prob_a + prob_b - prob_a_b
+```
+
+### Papas grandes y refresco chico
+
+La probabilidad de papas grandes y refresco chico es:
+
+```{r}
+papas_grandes_refresco_chico  = alimentos [ which(alimentos$Refresco=="Chico" & alimentos$Papas=="Grandes"),]
+prob_a_b = (dim(papas_grandes_refresco_chico)/length(refrescos))[1]
+prob_a_b
+```
+
+### Refresco chico si ya pidió papas grandes
+
+$$ A = \text{Papas grandes} $$
+
+$$ B = \text{Refresco chico} $$
+
+$$
+P(\text{B} \mid \text{A}) = \frac{P(\text{A} \cap \text{B})}{P(\text{A})}
+$$
+
+La probabilidad de papas grandes y refresco chico es:
+
+```{r}
+papas_grandes_refresco_chico  = alimentos [ which(alimentos$Refresco=="Chico" & alimentos$Papas=="Grandes"),]
+prob_a_b = (dim(papas_grandes_refresco_chico)/length(refrescos))[1]
+prob_a_b
+```
+
+La probabilidad de papas grandes
+
+```{r}
+papas_grandes = alimentos [ which(alimentos$Papas=="Grandes"),]
+prob_a = (dim(papas_grandes)/length(papas))[1]
+prob_a
+```
+
+La probabilidad de refresco chico dado que pidió papas grandes es:
+
+```{r}
+
+prob_a_b / prob_a
+```
+
+## 9. ¿Los eventos papas grandes y refresco grande son independientes? Sí, No y Por qué.
+
+$$ A = \text{Papas grandes} $$
+
+$$ B = \text{Refresco grande} $$
+
+$$
+\text{Si son independientes cumplen la siguiente condición}
+$$
+
+$$  P(A \cap B) = P(A) * P(B)   $$
+
+La probabilidad de papas grandes es:
+
+```{r}
+papas_grandes = alimentos [ which(alimentos$Papas=="Grandes"),]
+prob_a = (dim(papas_grandes)/length(papas))[1]
+prob_a
+
+```
+
+La probabilidad de refresco chico es:
+
+```{r}
+refresco_chico = alimentos [ which(alimentos$Refresco=="Grande"),]
+prob_b = (dim(refresco_chico)/length(refrescos))[1]
+prob_b
+```
+
+La probabilidad de papas grandes y refresco grande es:
+
+```{r}
+papas_grandes_refresco_chico  = alimentos [ which(alimentos$Refresco=="Grande" & alimentos$Papas=="Grandes"),]
+prob_a_b = (dim(papas_grandes_refresco_chico)/length(refrescos))[1]
+prob_a_b
+```
+
+Validamos la condición
+
+```{r}
+prob_a_b == prob_a * prob_b
+```
+
+Como no cumplen la igualdad, podemos decir que los dos eventos no son independientes
