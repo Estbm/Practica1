@@ -6,17 +6,19 @@ output: pdf_document
 ---
 
 ```{r}
+library(moments)
+```
+
+```{r}
 library(readr)
 alimentos <- read_csv("Combo.csv")
 ```
 
 ```{r}
-alimentos
+head(alimentos,5)
 ```
 
 ## 1. Describa el comportamiento de la variable carne teniendo en cuenta la tendencia, variabilidad, distribución, valores atípicos entre otros.
-
-Extraer carne del conjunto original
 
 ```{r}
 carnes = alimentos$Carne
@@ -44,21 +46,39 @@ median(carnes)
 
 ### Moda
 
-Como primer paso, se gráfica la tabla de frecuencias de "carne"
+No es posible obtener una moda para este conjunto de datos debido a la naturaleza de los mismos ya que son variables continuas.
+
+Una forma de evidenciar esto es gráficar la tabla de frecuencias de “carne”
 
 ```{r}
 barplot(table(carnes), col = c(4, rep("gray", 4)))
 legend("topright", "Moda", fill = 4)
 ```
 
-A simple vista no es posible obtener una moda con la precisión de los decimales de nuestro conjunto. Ahora se procede a redondear los valores en 2 y generar la gráfica.
+Se puede redondear los valores en 2 y generar la gráfica.
 
 ```{r}
 barplot(table(round(carnes,2 )), col = c(4, rep("gray", 4)))
 legend("topright", "Moda", fill = 4)
 ```
 
-De igual manera no es posible apreciar una moda, por lo tanto para este conjunto no obtendremos una moda debido a la precisión del valor decimal.
+**Distribuciones**
+
+**Asímetria y Curtosis**
+
+```{r}
+skewness(carnes)
+```
+
+```{r}
+kurtosis(carnes)
+```
+
+Ahora consideramos los siguientes casos para los valores de asímetria y curtosis:
+
+El valor de la asímetria es mayor o igual que -0.5 y menor o igual que 0.5 entonces podemos afirmar que la distribución es aproximadamente simétrica.
+
+El valor dela curtosis es mayor a 0.5 podemos afirmar que los valores de la distribución tienen una gran concentración en torno a la media del conjunto.
 
 ## Medidas de dispersión
 
@@ -71,14 +91,6 @@ rango
 
 El valor anterior indica que los valores del conjunto de datos se encuentran en un intervalo pequeño.
 
-### Varianza muestral
-
-```{r}
-var(carnes)
-```
-
-El valor anterior indica que los valores del conjunto de datos están cerca de la media, es decir, no existe demasiada dispersión de los mismos.
-
 ### Desviación estándar
 
 ```{r}
@@ -86,6 +98,16 @@ sd(carnes)
 ```
 
 El valor anterior indica que los valores del conjunto de datos están cerca de la media.
+
+Mas precisamente dentro del siguiente rango
+
+```{r}
+rango_inferior = mean(carnes) - sd(carnes) 
+
+rango_superior = mean(carnes) + sd(carnes) 
+
+print(paste("[", rango_inferior, ",", rango_superior, "]")) 
+```
 
 Una forma de poder evidenciar las conclusiones anteriores es crear un histograma del conjunto de datos
 
@@ -108,6 +130,40 @@ text(cuantiles_carnes[2], 1.25, expression(Q[1]))
 text(cuantiles_carnes[3], 1.25, expression(Q[2]))
 text(cuantiles_carnes[4], 1.25, expression(Q[3]))
 ```
+
+Vamos a revisar el rango intercuartílico
+
+```{r}
+cuantiles_carnes[4] - cuantiles_carnes[2]
+```
+
+Con el valor obtenido podemos afirmar que los datos se encuentran agrupados con respecto a la media.
+
+### Valores atípicos
+
+Una de las formas más utilizadas para calcular valores atípicos es
+
+**El promedio ± n \* desviación estándar**
+
+-   Para este caso n sera igual a 3
+
+    <https://help.highbond.com/helpdocs/analytics/141/user-guide/es/Content/analyzing_data/identifying_outliers.htm>
+
+    ```{r}
+    limite_superior_carnes_at = mean(carnes) + (3 * sd(carnes)) 
+    limite_inferior_carnes_at = mean(carnes) - (3 * sd(carnes))
+    print(paste("[", limite_inferior_carnes_at, ",", limite_superior_carnes_at, "]")) 
+    ```
+
+    A partir de los limites obtenidos se pueden apreciar los valores atípicos
+
+    ```{r}
+    print( carnes[carnes < limite_inferior_carnes_at])
+    ```
+
+    ```{r}
+    print( carnes[carnes > limite_superior_carnes_at])
+    ```
 
 ## 2. Describa el comportamiento de la variable salsa teniendo en cuenta la tendencia, variabilidad, distribución, valores atípicos entre otros.
 
@@ -148,6 +204,24 @@ legend("topright", "Moda", fill = 4)
 
 De igual manera que el conjunto de datos de "carnes" no es posible obtener una moda.
 
+## Distribuciones
+
+### **Asímetria y Curtosis**
+
+```{r}
+skewness(salsas)
+```
+
+```{r}
+kurtosis(salsas) 
+```
+
+Ahora consideramos los siguientes casos para los valores de asímetria y curtosis:
+
+El valor de la asímetria es mayor o igual que -0.5 y menor o igual que 0.5 entonces podemos afirmar que la distribución es aproximadamente simétrica.
+
+El valor dela curtosis es mayor a 0.5 podemos afirmar que los valores de la distribución tienen una gran concentración en torno a la media del conjunto.
+
 ## Medidas de dispersión
 
 ### Rango
@@ -158,14 +232,6 @@ max(salsas) - min(salsas)
 
 El valor anterior indica que los valores del conjunto de datos se encuentran en un intervalo pequeño.
 
-### Varianza muestral
-
-```{r}
-var(salsas)
-```
-
-El valor anterior indica que los valores del conjunto de datos están cerca de la media, es decir, no existe demasiada dispersión de los mismos.
-
 ### Desviación estándar
 
 ```{r}
@@ -173,6 +239,14 @@ sd(salsas)
 ```
 
 El valor anterior indica que los valores del conjunto de datos están cerca de la media.
+
+Mas precisamente dentro del siguiente rango
+
+```{r}
+rango_inferior = mean(salsas) - sd(salsas)
+rango_superior = mean(salsas) + sd(salsas)
+print(paste("[", rango_inferior, ",", rango_superior, "]"))
+```
 
 Una forma de poder evidenciar las conclusiones anteriores es crear un histograma del conjunto de datos
 
@@ -195,6 +269,40 @@ text(cuantiles_salsas[2], 1.25, expression(Q[1]))
 text(cuantiles_salsas[3], 1.25, expression(Q[2]))
 text(cuantiles_salsas[4], 1.25, expression(Q[3]))
 ```
+
+Vamos a revisar el rango intercuartílico
+
+```{r}
+cuantiles_salsas[4] - cuantiles_salsas[2]
+```
+
+Con el valor obtenido podemos afirmar que los datos se encuentran agrupados con respecto a la media.
+
+### Valores atípicos
+
+Una de las formas más utilizadas para calcular valores atípicos es
+
+**El promedio ± n \* desviación estándar**
+
+-   Para este caso n sera igual a 3
+
+    <https://help.highbond.com/helpdocs/analytics/141/user-guide/es/Content/analyzing_data/identifying_outliers.htm>
+
+    ```{r}
+    limite_superior_salsas_at = mean(salsas) + (3 * sd(salsas)) 
+    limite_inferior_salsas_at = mean(salsas) - (3 * sd(salsas))
+    print(paste("[", limite_inferior_salsas_at, ",", limite_superior_salsas_at, "]")) 
+    ```
+
+    A partir de los limites obtenidos se pueden apreciar los valores atípicos
+
+    ```{r}
+    print( salsas[salsas < limite_inferior_salsas_at])
+    ```
+
+    ```{r}
+    print( salsas[salsas > limite_superior_salsas_at])
+    ```
 
 ## 3. Describa el comportamiento de la variable papa
 
