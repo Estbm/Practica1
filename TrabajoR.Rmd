@@ -78,7 +78,7 @@ Ahora consideramos los siguientes casos para los valores de asímetria y curtosi
 
 El valor de la asímetria es mayor o igual que -0.5 y menor o igual que 0.5 entonces podemos afirmar que la distribución es aproximadamente simétrica.
 
-El valor dela curtosis es mayor a 0.5 podemos afirmar que los valores de la distribución tienen una gran concentración en torno a la media del conjunto.
+El valor dela curtosis es mayor a 0 podemos afirmar que los valores de la distribución tienen una gran concentración en torno a la media del conjunto.
 
 ## Medidas de dispersión
 
@@ -141,13 +141,26 @@ Con el valor obtenido podemos afirmar que los datos se encuentran agrupados con 
 
 ### Valores atípicos
 
-Una de las formas más utilizadas para calcular valores atípicos es
+Una de las formas más utilizadas para calcular valores atípicos es el test de Tukey, que toma como referencia la diferencia entre el primer cuartil (Q1) y el tercer cuartil (Q3), o rango intercuartílico. En un diagrama de caja se considera un valor atípico el que se encuentra 1,5 veces esa distancia de uno de esos cuartiles (atípico leve) o a 3 veces esa distancia (atípico extremo).
 
-**El promedio ± n \* desviación estándar**
+-    Atípico Leve
 
--   Para este caso n sera igual a 3
+    ```{r}
+    limite_superior_carnes_lv = mean(carnes) + (1.5 * sd(carnes)) 
+    limite_inferior_carnes_lv = mean(carnes) - (1.5 * sd(carnes))
+    print(paste("[", limite_inferior_carnes_lv, ",", limite_superior_carnes_lv, "]")) 
+    ```
 
-    <https://help.highbond.com/helpdocs/analytics/141/user-guide/es/Content/analyzing_data/identifying_outliers.htm>
+    A partir de los limites obtenidos se pueden apreciar los valores atípicos leves
+
+    ```{r}
+    print( carnes[carnes < limite_inferior_carnes_lv])
+    ```
+
+    ```{r}
+    print( carnes[carnes > limite_superior_carnes_lv])
+    ```
+-   Atípico Extremo
 
     ```{r}
     limite_superior_carnes_at = mean(carnes) + (3 * sd(carnes)) 
@@ -155,7 +168,7 @@ Una de las formas más utilizadas para calcular valores atípicos es
     print(paste("[", limite_inferior_carnes_at, ",", limite_superior_carnes_at, "]")) 
     ```
 
-    A partir de los limites obtenidos se pueden apreciar los valores atípicos
+    A partir de los limites obtenidos se pueden apreciar los valores atípicos extremos
 
     ```{r}
     print( carnes[carnes < limite_inferior_carnes_at])
@@ -220,7 +233,7 @@ Ahora consideramos los siguientes casos para los valores de asímetria y curtosi
 
 El valor de la asímetria es mayor o igual que -0.5 y menor o igual que 0.5 entonces podemos afirmar que la distribución es aproximadamente simétrica.
 
-El valor dela curtosis es mayor a 0.5 podemos afirmar que los valores de la distribución tienen una gran concentración en torno a la media del conjunto.
+El valor dela curtosis es mayor a 0 podemos afirmar que los valores de la distribución tienen una gran concentración en torno a la media del conjunto.
 
 ## Medidas de dispersión
 
@@ -280,13 +293,29 @@ Con el valor obtenido podemos afirmar que los datos se encuentran agrupados con 
 
 ### Valores atípicos
 
-Una de las formas más utilizadas para calcular valores atípicos es
+Utilizaremos el mismo test del enunciado anterior
 
-**El promedio ± n \* desviación estándar**
+-   Atípico Leve
 
--   Para este caso n sera igual a 3
 
-    <https://help.highbond.com/helpdocs/analytics/141/user-guide/es/Content/analyzing_data/identifying_outliers.htm>
+    ```{r}
+    limite_superior_salsas_lv = mean(salsas) + (1.5 * sd(salsas)) 
+    limite_inferior_salsas_lv = mean(salsas) - (1.5 * sd(salsas))
+    print(paste("[", limite_inferior_salsas_lv, ",", limite_superior_salsas_lv, "]")) 
+    ```
+
+    A partir de los limites obtenidos se pueden apreciar los valores atípicos leves
+
+    ```{r}
+    print( salsas[salsas < limite_inferior_salsas_lv])
+    ```
+
+    ```{r}
+    print( salsas[salsas > limite_superior_salsas_lv])
+    ```
+
+-   Atípico Extremo
+
 
     ```{r}
     limite_superior_salsas_at = mean(salsas) + (3 * sd(salsas)) 
@@ -294,7 +323,7 @@ Una de las formas más utilizadas para calcular valores atípicos es
     print(paste("[", limite_inferior_salsas_at, ",", limite_superior_salsas_at, "]")) 
     ```
 
-    A partir de los limites obtenidos se pueden apreciar los valores atípicos
+    A partir de los limites obtenidos se pueden apreciar los valores atípicos extremos
 
     ```{r}
     print( salsas[salsas < limite_inferior_salsas_at])
